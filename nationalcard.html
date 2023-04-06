@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        #body1 {
+            background-color: blue;
+            display: flex;
+            justify-content: center;
+        }
+        .container{
+            width: 400px;
+            height: 500px;
+            background-color: aliceblue;
+            border-radius: 20px;
+            margin-top: 100px;
+            border: 2px solid rgb(2, 2, 53);
+            box-shadow: 5px 5px 10px 2px;
+        }
+        .search{
+            margin-top: 50px;
+            margin-left: 50px;
+        }
+        .search button {
+            font-size: large;
+            padding: 10px;
+            border-radius: 20px;
+            background-color: blue;
+            color: aliceblue;
+            border: none
+        }
+        .search input{
+            margin-right: 4px;
+            font-size: large;
+            padding: 5px;
+            border-radius: 5px;
+            border: none
+        }
+        input[type=text]:focus {
+            outline: none;
+            border: 2px solid blue;
+        }
+        .search button:hover{
+            font-size: larger;
+            margin: 2px;
+            padding: 20px;
+            border-radius: 30px;
+            background-color: blue;
+            color: aliceblue;
+            border: none
+        }
+        #flag{
+            display: block;
+            width: 100px;
+            height: 100px;
+            margin-left: 90px;
+        }
+        h2{
+            margin-left: 100px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        h4{
+            display: inline;
+        }
+        h3{
+            margin-top : 20px;
+            margin-left : 70px;
+            font-size: small;
+            color: red;
+        }
+        .boxi{
+            margin: 5px;
+        }
+        #heading{
+            font-size: 40px;
+            font-weight: 700;
+            margin-left: 65px;
+            margin-top: 50px;
+            color: rgb(15, 15, 137);
+            
+        }
+    </style>
+</head>
+<body id="body1">
+    <div class="container">
+        <div id="heading">Country Card</div>
+       <div class="search">
+        <input type="text" id="search-cont" placeholder="Enter country name">
+        <button id="search-bt">Search</button>
+        <div id="result"></div>
+       </div>
+    </div>
+</body>
+<script>
+    let name = document.getElementById('search-cont')
+    let bt = document.getElementById('search-bt')
+    let result = document.getElementById('result')
+
+    bt.addEventListener('click', ()=>{
+              let countryname = name.value;
+              let furl = `https://restcountries.com/v3.1/name/${countryname}?fullText=true`
+              console.log(furl)
+              fetch(furl)
+              .then((response)=> response.json())
+              .then((data)=>{
+                // console.log(data[0])
+                // console.log(data[0].capital[0])
+                // console.log(data[0].flags.svg)
+                // console.log(data[0].name.common)
+                // console.log(data[0].continents[0])
+                // console.log(Object.keys(data[0].currencies)[0])
+                // console.log(data[0].currencies[Object.keys(data[0].currencies)].name)
+                // console.log(Object.values(data[0].languages).toString().split(",").join(", "))
+
+                result.innerHTML = 
+                ` <img  src ="${data[0].flags.svg}" id="flag">
+                  <h2>${data[0].name.common}</h2>
+                  <div class="box" >
+                    <div class="boxi">
+                        <h4>Capital:</h4>
+                        <span>${data[0].capital[0]}</span>
+                    </div>
+                  </div>
+                  <div class="box" >
+                    <div class="boxi">
+                        <h4>Continent:</h4>
+                        <span>${data[0].continents[0]}</span>
+                    </div>
+                  </div>
+                  <div class="box" >
+                    <div class="boxi">
+                        <h4>Population:</h4>
+                        <span>${data[0].population}</span>
+                    </div>
+                  </div>
+                  <div class="box" >
+                    <div class="boxi">
+                        <h4>Currency:</h4>
+                        <span>${data[0].currencies[Object.keys(data[0].currencies)].name}-${Object.keys(data[0].currencies)[0]}</span>
+                    </div>
+                  </div>
+                  <div class="box" >
+                    <div class="boxi">
+                        <h4>Common Languages:</h4>
+                        <span>${Object.values(data[0].languages).toString().split(",").join(", ")}</span>
+                    </div>
+                  </div>
+                `;
+              }).catch(()=>{
+                if(countryname.length == 0){
+                    result.innerHTML =  `<h3> entry field cannot be entry</h3>`
+                }
+                else{
+                    result.innerHTML =  `<h3> entry field is incorrect </h3>`
+                }
+              })
+
+    })
+</script>
+</html>
